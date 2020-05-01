@@ -1,0 +1,20 @@
+body {
+  width: 95vw;
+  height: 95vh;
+  overflow: hidden;
+  background: #0f0e17;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.board {
+  border: 2px solid white;
+  box-shadow: 0 0 7px white;
+}
+
+.container {
+  width: 90%;
+  height: 100%;
+  position: absolute;
+}
