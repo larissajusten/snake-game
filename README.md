@@ -5,13 +5,12 @@ Repositório destinado a recriar o famoso "joguinho da cobrinha" com JavaScript/
 ## Demo
 
 ![gif](https://i.imgur.com/sGdTovQ.gif)
-
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install foobar.
+GIF desatualizado.
 
 ## Roteiro
 
-- Aprimorar o design.
-- Implementar restart do jogo.
+- [x] Aprimorar o layout.
+- [ ] Implementar restart do jogo.
 
 ## Contribuições
 
