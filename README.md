@@ -5,7 +5,8 @@ Repositório destinado a recriar o famoso "joguinho da cobrinha" com JavaScript/
 ## Demo
 
 ![gif](https://i.imgur.com/sGdTovQ.gif)
-GIF desatualizado.
+
+* GIF desatualizado.
 
 ## Roteiro
 
