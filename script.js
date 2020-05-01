@@ -20,6 +20,38 @@ let frutinha = {
   y: geraNumeroAleatorio()
 }
 
+function mantemLoopDaCobrinha() {
+  if(cobrinha[0].x > 15 * box && direcao == "right") {
+    clearInterval(jogo);
+    alert("Game over!");
+  }
+
+  if(cobrinha[0].x < 0 && direcao == "left") {
+    clearInterval(jogo);
+    alert("Game over!");
+  }
+
+  if(cobrinha[0].y < 0 && direcao == "up") {
+    clearInterval(jogo);
+    alert("Game over!");
+  }
+
+  if(cobrinha[0].y > 15 * box && direcao == "down") {
+    clearInterval(jogo);
+    alert("Game over!");
+  }
+}
+
+function verificaSeCobrinhaSeChoca() {
+  for (i = 1; i < cobrinha.length; i++) {
+    if (cobrinha[0].x === cobrinha[i].x 
+      && cobrinha[0].y === cobrinha[i].y) {
+      clearInterval(jogo);
+      alert("Game over!");
+    }
+  }
+}
+
 function criarBG() {
   context.fillStyle = "lightgreen"; //estilo do canvas/contexto
   context.fillRect(0, 0, 16 * box, 16 * box); //desenha o retangulo (pos x, pos y, largura, altura)
@@ -37,36 +69,7 @@ function desenharFrutinha() {
   context.fillRect(frutinha.x, frutinha.y, box, box);
 }
 
-document.addEventListener('keydown', atualizarEventoSetas);
-function atualizarEventoSetas(event) {
-  //KeyCode das setas é na direção horária
-  if(event.keyCode == 37 && direcao !== "right") direcao = "left";
-  if(event.keyCode == 38 && direcao !== "down") direcao = "up";
-  if(event.keyCode == 39 && direcao !== "left") direcao = "right";
-  if(event.keyCode == 40 && direcao !== "up") direcao = "down";
-}
-
-function iniciarJogo() {
-  if(cobrinha[0].x > 15 * box && direcao == "right") {
-    cobrinha[0].x = 0;
-  }
-
-  if(cobrinha[0].x < 0 && direcao == "left") {
-    cobrinha[0].x = 16 * box;
-  }
-
-  if(cobrinha[0].y < 0 && direcao == "up") {
-    cobrinha[0].y = 16 * box;
-  }
-
-  if(cobrinha[0].y > 15 * box && direcao == "down") {
-    cobrinha[0].y = 0;
-  }
-
-  criarBG();
-  criarCobrinha();
-  desenharFrutinha();
-
+function comportamentoDaCobrinha() {
   let cobrinhaPosicaoX = cobrinha[0].x; 
   let cobrinhaPosicaoY = cobrinha[0].y;
 
@@ -78,23 +81,35 @@ function iniciarJogo() {
   if (cobrinhaPosicaoX == frutinha.x && cobrinhaPosicaoY == frutinha.y) {
     frutinha.x = geraNumeroAleatorio();
     frutinha.y = geraNumeroAleatorio();
+    velocidadeAtual += 10;
+    console.log(velocidadeAtual);
   } else {
     cobrinha.pop();
   }
-
-  // if (cobrinhaPosicaoX != frutinha.x || cobrinhaPosicaoY != frutinha.y) {
-  //   cobrinha.pop();
-  // }else{
-  //   frutinha.x = geraNumeroAleatorio();
-  //   frutinha.y = geraNumeroAleatorio();
-  // }
 
   let newHead = {
     x: cobrinhaPosicaoX,
     y: cobrinhaPosicaoY
   }
-  
   cobrinha.unshift(newHead);
+}
+
+document.addEventListener('keydown', atualizarEventoSetas);
+function atualizarEventoSetas(event) {
+  //KeyCode das setas é na direção horária
+  if(event.keyCode == 37 && direcao !== "right") direcao = "left";
+  if(event.keyCode == 38 && direcao !== "down") direcao = "up";
+  if(event.keyCode == 39 && direcao !== "left") direcao = "right";
+  if(event.keyCode == 40 && direcao !== "up") direcao = "down";
+}
+
+function iniciarJogo() {
+  verificaSeCobrinhaSeChoca();
+  mantemLoopDaCobrinha();
+  criarBG();
+  criarCobrinha();
+  desenharFrutinha();
+  comportamentoDaCobrinha();
 }
 
 let jogo = setInterval(iniciarJogo, velocidadeAtual);
