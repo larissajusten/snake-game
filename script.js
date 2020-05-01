@@ -4,18 +4,20 @@ const velocidadeInicial = 150;
 
 let box = 32;
 let velocidadeAtual = velocidadeInicial;
-let direction = "right";
+let direcao = "right";
 
-let snake = [];
-snake[0] = {
+let cobrinha = [];
+cobrinha[0] = {
   x: 8 * box,
   y: 8 * box
 }
 
-const numeroRandomico = Math.floor(Math.random() * 15 + 1) * box;
+function geraNumeroAleatorio() {
+  return Math.floor(Math.random() * 15 + 1) * box;
+}
 let frutinha = {
-  x: numeroRandomico,
-  y: numeroRandomico
+  x: geraNumeroAleatorio(),
+  y: geraNumeroAleatorio()
 }
 
 function criarBG() {
@@ -24,9 +26,9 @@ function criarBG() {
 }
 
 function criarCobrinha() {
-  for (i = 0; i < snake.length; i++) {
+  for (i = 0; i < cobrinha.length; i++) {
     context.fillStyle = "green";
-    context.fillRect(snake[i].x, snake[i].y, box, box); 
+    context.fillRect(cobrinha[i].x, cobrinha[i].y, box, box); 
   }
 }
 
@@ -35,52 +37,64 @@ function desenharFrutinha() {
   context.fillRect(frutinha.x, frutinha.y, box, box);
 }
 
-document.addEventListener('keydown', update);
-function update(event) {
+document.addEventListener('keydown', atualizarEventoSetas);
+function atualizarEventoSetas(event) {
   //KeyCode das setas é na direção horária
-  if(event.keyCode == 37 && direction !== "right") direction = "left";
-  if(event.keyCode == 38 && direction !== "down") direction = "up";
-  if(event.keyCode == 39 && direction !== "left") direction = "right";
-  if(event.keyCode == 40 && direction !== "up") direction = "down";
+  if(event.keyCode == 37 && direcao !== "right") direcao = "left";
+  if(event.keyCode == 38 && direcao !== "down") direcao = "up";
+  if(event.keyCode == 39 && direcao !== "left") direcao = "right";
+  if(event.keyCode == 40 && direcao !== "up") direcao = "down";
 }
 
 function iniciarJogo() {
-  if(snake[0].x >= 15 * box && direction == "right") {
-    snake[0].x = 0;
+  if(cobrinha[0].x > 15 * box && direcao == "right") {
+    cobrinha[0].x = 0;
   }
 
-  if(snake[0].x <= 0 && direction == "left") {
-    snake[0].x = 16 * box;
+  if(cobrinha[0].x < 0 && direcao == "left") {
+    cobrinha[0].x = 16 * box;
   }
 
-  if(snake[0].y <= 0 && direction == "up") {
-    snake[0].y = 16 * box;
+  if(cobrinha[0].y < 0 && direcao == "up") {
+    cobrinha[0].y = 16 * box;
   }
 
-  if(snake[0].y >= 15 * box && direction == "down") {
-    snake[0].y = 0;
+  if(cobrinha[0].y > 15 * box && direcao == "down") {
+    cobrinha[0].y = 0;
   }
 
   criarBG();
   criarCobrinha();
   desenharFrutinha();
 
-  let snakePosicaoX = snake[0].x; 
-  let snakePosicaoY = snake[0].y;
+  let cobrinhaPosicaoX = cobrinha[0].x; 
+  let cobrinhaPosicaoY = cobrinha[0].y;
 
-  if(direction == "right") snakePosicaoX += box;
-  if(direction == "left") snakePosicaoX -= box;
-  if(direction == "up") snakePosicaoY -= box;
-  if(direction == "down") snakePosicaoY += box;
+  if(direcao == "right") cobrinhaPosicaoX += box;
+  if(direcao == "left") cobrinhaPosicaoX -= box;
+  if(direcao == "up") cobrinhaPosicaoY -= box;
+  if(direcao == "down") cobrinhaPosicaoY += box;
 
-  snake.pop();
+  if (cobrinhaPosicaoX == frutinha.x && cobrinhaPosicaoY == frutinha.y) {
+    frutinha.x = geraNumeroAleatorio();
+    frutinha.y = geraNumeroAleatorio();
+  } else {
+    cobrinha.pop();
+  }
+
+  // if (cobrinhaPosicaoX != frutinha.x || cobrinhaPosicaoY != frutinha.y) {
+  //   cobrinha.pop();
+  // }else{
+  //   frutinha.x = geraNumeroAleatorio();
+  //   frutinha.y = geraNumeroAleatorio();
+  // }
 
   let newHead = {
-    x: snakePosicaoX,
-    y: snakePosicaoY
+    x: cobrinhaPosicaoX,
+    y: cobrinhaPosicaoY
   }
   
-  snake.unshift(newHead);
+  cobrinha.unshift(newHead);
 }
 
 let jogo = setInterval(iniciarJogo, velocidadeAtual);
