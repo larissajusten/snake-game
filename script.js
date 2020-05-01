@@ -1,8 +1,10 @@
 let canvas = document.getElementById("snake");
 let context = canvas.getContext("2d"); //tratar o arquivo como plano 2d
-let box = 32;
 const velocidadeInicial = 150;
+
+let box = 32;
 let velocidadeAtual = velocidadeInicial;
+let direction = "right";
 
 let snake = [];
 snake[0] = {
@@ -10,7 +12,11 @@ snake[0] = {
   y: 8 * box
 }
 
-let direction = "right";
+const numeroRandomico = Math.floor(Math.random() * 15 + 1) * box;
+let frutinha = {
+  x: numeroRandomico,
+  y: numeroRandomico
+}
 
 function criarBG() {
   context.fillStyle = "lightgreen"; //estilo do canvas/contexto
@@ -24,8 +30,12 @@ function criarCobrinha() {
   }
 }
 
-document.addEventListener('keydown', update);
+function desenharFrutinha() {
+  context.fillStyle = "red";
+  context.fillRect(frutinha.x, frutinha.y, box, box);
+}
 
+document.addEventListener('keydown', update);
 function update(event) {
   //KeyCode das setas é na direção horária
   if(event.keyCode == 37 && direction !== "right") direction = "left";
@@ -53,6 +63,7 @@ function iniciarJogo() {
 
   criarBG();
   criarCobrinha();
+  desenharFrutinha();
 
   let snakePosicaoX = snake[0].x; 
   let snakePosicaoY = snake[0].y;
