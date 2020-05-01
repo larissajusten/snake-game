@@ -1,11 +1,16 @@
 let canvas = document.getElementById("snake");
 let context = canvas.getContext("2d"); //tratar o arquivo como plano 2d
 let box = 32;
+const velocidadeInicial = 150;
+let velocidadeAtual = velocidadeInicial;
+
 let snake = [];
 snake[0] = {
   x: 8 * box,
   y: 8 * box
 }
+
+let direction = "right";
 
 function criarBG() {
   context.fillStyle = "lightgreen"; //estilo do canvas/contexto
@@ -19,5 +24,52 @@ function criarCobrinha() {
   }
 }
 
-criarBG()
-criarCobrinha();
+document.addEventListener('keydown', update);
+
+function update(event) {
+  //KeyCode das setas é na direção horária
+  if(event.keyCode == 37 && direction !== "right") direction = "left";
+  if(event.keyCode == 38 && direction !== "down") direction = "up";
+  if(event.keyCode == 39 && direction !== "left") direction = "right";
+  if(event.keyCode == 40 && direction !== "up") direction = "down";
+}
+
+function iniciarJogo() {
+  if(snake[0].x >= 15 * box && direction == "right") {
+    snake[0].x = 0;
+  }
+
+  if(snake[0].x <= 0 && direction == "left") {
+    snake[0].x = 16 * box;
+  }
+
+  if(snake[0].y <= 0 && direction == "up") {
+    snake[0].y = 16 * box;
+  }
+
+  if(snake[0].y >= 15 * box && direction == "down") {
+    snake[0].y = 0;
+  }
+
+  criarBG();
+  criarCobrinha();
+
+  let snakePosicaoX = snake[0].x; 
+  let snakePosicaoY = snake[0].y;
+
+  if(direction == "right") snakePosicaoX += box;
+  if(direction == "left") snakePosicaoX -= box;
+  if(direction == "up") snakePosicaoY -= box;
+  if(direction == "down") snakePosicaoY += box;
+
+  snake.pop();
+
+  let newHead = {
+    x: snakePosicaoX,
+    y: snakePosicaoY
+  }
+  
+  snake.unshift(newHead);
+}
+
+let jogo = setInterval(iniciarJogo, velocidadeAtual);
